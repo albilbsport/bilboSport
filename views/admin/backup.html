@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Copia de Seguridad - Admin BilboAG</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" type="image/svg+xml" href="/icons/logo.svg">
+</head>
+<body id="admin-backup-page">
+
+  <!-- Top Desktop Nav -->
+  <header class="top-nav">
+    <div class="top-nav-container">
+      <a href="/" class="brand-link">
+        <img src="/icons/logo.svg" alt="BilboAG Logo">
+        <span class="brand-name">Bilbo<span style="color: var(--color-primary);">AG</span></span>
+        <span class="brand-badge">ADMIN</span>
+      </a>
+
+      <nav class="desktop-nav-links">
+        <a href="/" class="nav-item">Inicio</a>
+        <a href="/training" class="nav-item">Entrenar</a>
+        <a href="/exercises" class="nav-item">Ejercicios</a>
+        <a href="/history" class="nav-item">Historial</a>
+        <a href="/admin/users" class="nav-item">Usuarios</a>
+        <a href="/admin/backup" class="nav-item active">Copia de Seguridad</a>
+      </nav>
+
+      <div class="user-profile-menu">
+        <span id="nav-username" class="text-muted" style="font-size: 0.875rem; font-weight: 600;"></span>
+        <a href="/logout" class="btn btn-secondary btn-sm">Salir</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="app-container fade-in">
+    <!-- Header with Admin Subnavigation -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 24px;">
+      <div>
+        <h1 style="font-size: 1.5rem;">Copia de Seguridad y Restauración</h1>
+        <p class="text-muted" style="font-size: 0.875rem;">Descarga o restaura la base de datos SQLite completa de BilboAG.</p>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <a href="/admin/users" class="btn btn-outline btn-sm">Gestión de Usuarios</a>
+        <a href="/admin/backup" class="btn btn-primary btn-sm">Copia y Restauración</a>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <!-- Section 1: Backup Download -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span>💾</span>
+            <span>Descargar Copia de Seguridad</span>
+          </div>
+        </div>
+        <p style="font-size: 0.875rem; color: var(--color-text-muted); margin-bottom: 18px;">
+          Genera y descarga un archivo binario <code>.db</code> con el estado exacto de la base de datos (usuarios, ejercicios, series y récords históricos).
+        </p>
+
+        <div style="background: var(--color-bg-secondary); border-radius: var(--radius-md); padding: 14px; margin-bottom: 20px; font-size: 0.8125rem;">
+          <div style="font-weight: 600; margin-bottom: 4px;">Información de la base de datos:</div>
+          <div>Motor: SQLite (better-sqlite3)</div>
+          <div>Modo: WAL activo</div>
+          <div>Integridad: Checkpoint automático previo a la descarga</div>
+        </div>
+
+        <a href="/api/admin/backup" class="btn btn-primary btn-block">
+          📥 Descargar backup completo (.db)
+        </a>
+      </div>
+
+      <!-- Section 2: Restore from file -->
+      <div class="card" style="border-left: 4px solid var(--color-warning);">
+        <div class="card-header">
+          <div class="card-title">
+            <span>🔄</span>
+            <span>Restaurar Base de Datos</span>
+          </div>
+        </div>
+
+        <!-- Warning Alert -->
+        <div style="background-color: hsl(4, 86%, 96%); border: 1px solid hsl(4, 86%, 85%); color: hsl(4, 86%, 35%); padding: 12px 14px; border-radius: var(--radius-md); font-size: 0.8125rem; margin-bottom: 16px;">
+          <strong>⚠️ Advertencia Crítica:</strong> Al restaurar una base de datos se reemplazará la información existente. El sistema creará automáticamente un duplicado previo de resguardo antes de sobreescribir.
+        </div>
+
+        <form id="restore-form">
+          <input type="file" id="restore-file-input" accept=".db,application/x-sqlite3" style="display: none;">
+
+          <div id="backup-dropzone" class="dropzone" style="margin-bottom: 14px;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-muted" style="margin-bottom: 8px;">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <div style="font-size: 0.875rem; font-weight: 600;">Arrastra tu archivo .db aquí o haz clic para seleccionarlo</div>
+            <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 4px;">Solo archivos SQLite válidos (máx. 50 MB)</div>
+          </div>
+
+          <div id="selected-file-label" style="display: none; font-size: 0.8125rem; color: var(--color-primary-dark); margin-bottom: 14px; padding: 8px; background: var(--color-primary-light); border-radius: var(--radius-sm);"></div>
+
+          <button type="submit" id="btn-restore-submit" class="btn btn-danger btn-block" disabled>
+            Restaurar Base de Datos
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="/" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      <span>Inicio</span>
+    </a>
+    <a href="/training" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24"><path d="M6 5v14M18 5v14M6 12h12M4 7h4M16 7h4M4 17h4M16 17h4"></path></svg>
+      <span>Entrenar</span>
+    </a>
+    <a href="/admin/users" class="bottom-nav-item active">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+      <span>Admin</span>
+    </a>
+    <a href="/exercises" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+      <span>Ejercicios</span>
+    </a>
+  </nav>
+
+  <script src="/js/admin.js"></script>
+  <script>
+    // Fetch profile
+    fetch('/api/auth/me')
+      .then(r => r.json())
+      .then(d => {
+        if (d.loggedIn && d.user) {
+          const userEl = document.getElementById('nav-username');
+          if (userEl) userEl.textContent = d.user.username;
+        }
+      })
+      .catch(() => {});
+  </script>
+</body>
+</html>

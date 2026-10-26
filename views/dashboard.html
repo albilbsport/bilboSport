@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - BilboAG</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" type="image/svg+xml" href="/icons/logo.svg">
+</head>
+<body>
+
+  <!-- Top Desktop Nav -->
+  <header class="top-nav">
+    <div class="top-nav-container">
+      <a href="/" class="brand-link">
+        <img src="/icons/logo.svg" alt="BilboAG Logo">
+        <span class="brand-name">Bilbo<span style="color: var(--color-primary);">AG</span></span>
+      </a>
+
+      <nav class="desktop-nav-links">
+        <a href="/" class="nav-item active">Inicio</a>
+        <a href="/training" class="nav-item">Entrenar</a>
+        <a href="/exercises" class="nav-item">Ejercicios</a>
+        <a href="/history" class="nav-item">Historial</a>
+        <a href="/admin/users" class="nav-item admin-only-link" style="display: none;">Admin</a>
+      </nav>
+
+      <div class="user-profile-menu">
+        <span id="nav-username" class="text-muted" style="font-size: 0.875rem; font-weight: 600;"></span>
+        <a href="/logout" class="btn btn-secondary btn-sm" title="Cerrar sesión">Salir</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="app-container fade-in">
+    <!-- Hero / Welcome Section -->
+    <div class="card" style="background: linear-gradient(135deg, hsl(220, 90%, 55%) 0%, hsl(220, 90%, 42%) 100%); color: #ffffff; border: none; padding: 28px 24px;">
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <span class="badge" style="background: rgba(255, 255, 255, 0.2); color: #ffffff; align-self: flex-start;">Panel Principal</span>
+        <h1 id="user-greeting" style="color: #ffffff; font-size: 1.5rem;">¡Hola! 💪</h1>
+        <p style="color: rgba(255, 255, 255, 0.9); font-size: 0.9375rem; max-width: 600px;">
+          Registra tus series, calcula tu 1RM estimado y supera tus marcas en cada entrenamiento.
+        </p>
+        <div style="display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap;">
+          <a href="/training" class="btn btn-lg" style="background: #ffffff; color: var(--color-primary-dark); font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+            🏋️ Entrenar hoy
+          </a>
+          <a href="/exercises" class="btn btn-outline" style="border-color: rgba(255, 255, 255, 0.8); color: #ffffff;">
+            Explorar Ejercicios
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="grid-2" style="margin-bottom: 20px;">
+      <div class="card" style="margin-bottom: 0; padding: 18px;">
+        <div class="text-muted" style="font-size: 0.8125rem; font-weight: 600; text-transform: uppercase;">Total Sesiones</div>
+        <div id="stat-workouts" style="font-size: 1.75rem; font-weight: 800; color: var(--color-primary); margin-top: 4px;">-</div>
+      </div>
+      <div class="card" style="margin-bottom: 0; padding: 18px;">
+        <div class="text-muted" style="font-size: 0.8125rem; font-weight: 600; text-transform: uppercase;">Series Registradas</div>
+        <div id="stat-sets" style="font-size: 1.75rem; font-weight: 800; color: var(--color-success); margin-top: 4px;">-</div>
+      </div>
+    </div>
+
+    <!-- Top 5 1RM Records -->
+    <div style="margin-bottom: 24px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h2>🏆 Récords Personales (Top 5 1RM)</h2>
+      </div>
+      <div id="records-container" class="grid-2" style="gap: 12px;">
+        <div class="skeleton" style="width: 100%; height: 75px;"></div>
+        <div class="skeleton" style="width: 100%; height: 75px;"></div>
+      </div>
+    </div>
+
+    <!-- Progress Line Chart & Last Workout -->
+    <div class="grid-2">
+      <!-- Progress Chart -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span>📈</span>
+            <span id="chart-exercise-title">Progresión de 1RM</span>
+          </div>
+        </div>
+        <div id="chart-wrapper" class="chart-container">
+          <div class="skeleton" style="width: 100%; height: 180px;"></div>
+        </div>
+      </div>
+
+      <!-- Last Session -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span>⏱️</span>
+            <span>Último Entrenamiento</span>
+          </div>
+        </div>
+        <div id="last-session-container">
+          <div class="skeleton" style="width: 100%; height: 120px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Export Section -->
+    <div class="card" style="margin-top: 10px; background-color: var(--color-bg-secondary); border-style: dashed;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <h3 style="font-size: 1rem;">Exportar datos de entrenamiento</h3>
+          <p class="text-muted" style="font-size: 0.8125rem;">Descarga todas tus series y récords en formato CSV o JSON.</p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <a href="/export/csv" class="btn btn-outline btn-sm">Descargar CSV</a>
+          <a href="/export/json" class="btn btn-secondary btn-sm">Descargar JSON</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="/" class="bottom-nav-item active">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      <span>Inicio</span>
+    </a>
+    <a href="/training" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24"><path d="M6 5v14M18 5v14M6 12h12M4 7h4M16 7h4M4 17h4M16 17h4"></path></svg>
+      <span>Entrenar</span>
+    </a>
+    <a href="/history" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+      <span>Historial</span>
+    </a>
+    <a href="/exercises" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+      <span>Ejercicios</span>
+    </a>
+  </nav>
+
+  <script src="/js/dashboard.js"></script>
+  <script>
+    // Check if user is admin to show admin nav link
+    fetch('/api/auth/me')
+      .then(r => r.json())
+      .then(d => {
+        if (d.loggedIn && d.user) {
+          const userEl = document.getElementById('nav-username');
+          if (userEl) userEl.textContent = d.user.username;
+          if (d.user.role === 'admin') {
+            document.querySelectorAll('.admin-only-link').forEach(el => el.style.display = 'inline-flex');
+          }
+        }
+      })
+      .catch(() => {});
+  </script>
+</body>
+</html>

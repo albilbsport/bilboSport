@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro - BilboAG</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" type="image/svg+xml" href="/icons/logo.svg">
+</head>
+<body style="display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 16px; background-color: var(--color-bg-secondary);">
+
+  <div class="card fade-in" style="width: 100%; max-width: 440px; padding: 32px 24px; box-shadow: var(--color-card-shadow-hover);">
+    <div class="text-center" style="margin-bottom: 20px;">
+      <a href="/login" class="brand-link" style="justify-content: center; margin-bottom: 8px;">
+        <img src="/icons/logo.svg" alt="BilboAG Logo" width="44" height="44">
+        <span style="font-size: 1.5rem; font-weight: 800; color: var(--color-text);">Bilbo<span style="color: var(--color-primary);">AG</span></span>
+      </a>
+      <h2 style="font-size: 1.25rem;">Crear una cuenta</h2>
+      <p class="text-muted" style="font-size: 0.8125rem; margin-top: 4px;">
+        Tu cuenta quedará pendiente de aprobación por el administrador
+      </p>
+    </div>
+
+    <div id="error-alert" style="display: none; margin-bottom: 16px; padding: 10px 14px; border-radius: var(--radius-md); font-size: 0.875rem;" class="badge-danger"></div>
+
+    <form id="register-form" action="/register" method="POST">
+      <div class="form-group">
+        <label for="username" class="form-label">Nombre de Usuario</label>
+        <input type="text" id="username" name="username" class="form-control" placeholder="ej: alberto_fit" minlength="3" required autocomplete="username">
+      </div>
+
+      <div class="form-group">
+        <label for="email" class="form-label">Correo Electrónico</label>
+        <input type="email" id="email" name="email" class="form-control" placeholder="tu@email.com" required autocomplete="email">
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Contraseña</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Mínimo 6 caracteres" minlength="6" required autocomplete="new-password">
+      </div>
+
+      <div class="form-group">
+        <label for="confirm_password" class="form-label">Confirmar Contraseña</label>
+        <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Repite tu contraseña" minlength="6" required autocomplete="new-password">
+      </div>
+
+      <button type="submit" id="btn-register-submit" class="btn btn-primary btn-block" style="margin-top: 20px;">
+        Solicitar Registro
+      </button>
+    </form>
+
+    <div class="text-center" style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--color-border); font-size: 0.875rem;">
+      <span class="text-muted">¿Ya tienes cuenta?</span>
+      <a href="/login" style="font-weight: 600; margin-left: 4px;">Inicia sesión</a>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('register-form');
+    const errorAlert = document.getElementById('error-alert');
+
+    // Handle error params
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('error') === 'username_taken') {
+      showError('El nombre de usuario ya está registrado.');
+    } else if (params.get('error') === 'email_taken') {
+      showError('El correo electrónico ya está registrado.');
+    } else if (params.get('error') === 'password_mismatch') {
+      showError('Las contraseñas no coinciden.');
+    }
+
+    form.addEventListener('submit', (e) => {
+      const p1 = document.getElementById('password').value;
+      const p2 = document.getElementById('confirm_password').value;
+
+      if (p1 !== p2) {
+        e.preventDefault();
+        showError('Las contraseñas no coinciden.');
+        return;
+      }
+
+      if (p1.length < 6) {
+        e.preventDefault();
+        showError('La contraseña debe tener al menos 6 caracteres.');
+        return;
+      }
+    });
+
+    function showError(msg) {
+      errorAlert.style.display = 'block';
+      errorAlert.style.color = 'hsl(4, 86%, 35%)';
+      errorAlert.textContent = msg;
+    }
+  </script>
+</body>
+</html>
